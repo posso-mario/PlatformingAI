@@ -1,16 +1,27 @@
 #include "stdafx.h"
 #include "menu.h"
 
+menu::~menu()
+{
+	//_menuList.~list();
+}
 
-menu::menuaction menu::show(sf::RenderWindow& window)
+menu::menu()
 {
 	std::cout << "showing menu \n";
 	//load menu texture from file
-	sf::Texture texture;
-	texture.loadFromFile("images/menusprite.png");
+	/*sf::Texture texture;
+	sf::Vector2u windowSize = window.getSize();
+	texture.create(windowSize.x, windowSize.y);
+	texture.update(window);
 	sf::Sprite sprite(texture);
-	sprite.setPosition(395, 0);
-
+	sf::Texture texture2;
+	texture2.loadFromFile("images/menusprite.png");
+	sf::Sprite sprite2(texture2);
+	
+	
+	sprite2.setPosition(395, 0);
+*/
 	//Setup clickable regions
 
 	menulist playButton;
@@ -37,12 +48,12 @@ menu::menuaction menu::show(sf::RenderWindow& window)
 	_menuList.push_back(playButton);
 	_menuList.push_back(optionsButton);
 	_menuList.push_back(exitButton);
-
+/*
 	window.clear();
 	window.draw(sprite);
+	window.draw(sprite2);
 	window.display();
-
-	return getMenuAction(window);
+*/
 }
 
 menu::menuaction menu::handleClick(int x, int y)

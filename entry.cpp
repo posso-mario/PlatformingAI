@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "entry.h"
 #include "intro.h"
-#include "menu.h"
+
 
 
 entry::gamestate entry::_gameState = uninitialized;
 sf::RenderWindow entry::_mainWindow;
+menu entry::_menu;
 
 void entry::start(void)
 {
@@ -13,6 +14,8 @@ void entry::start(void)
 		return;
 
 	_mainWindow.create(sf::VideoMode(1024, 768, 32), "AI-Platformer");
+	_menu.load("images/menusprite.png");
+	_menu.setPosition(395, 0);
 	_gameState = entry::gamestate::showingsplash;
 
 	while (!isExiting())
@@ -80,8 +83,9 @@ void entry::showIntroScreen()
 
 void entry::showMenuSprite()
 {
-	menu menuSprite;
-	menu::menuaction action = menuSprite.show(_mainWindow);
+	_menu.draw(_mainWindow);
+	_mainWindow.display();
+	menu::menuaction action = _menu.getMenuAction(_mainWindow);
 	switch (action)
 	{
 	case menu::exit:
