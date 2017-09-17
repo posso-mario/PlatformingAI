@@ -6,7 +6,8 @@
 
 entry::gamestate entry::_gameState = uninitialized;
 sf::RenderWindow entry::_mainWindow;
-menu entry::_menu;
+objmngr entry::_objectManager;
+static intro * introobj = new intro();
 
 void entry::start(void)
 {
@@ -14,9 +15,10 @@ void entry::start(void)
 		return;
 
 	_mainWindow.create(sf::VideoMode(1024, 768, 32), "AI-Platformer");
-	_menu.load("images/menusprite.png");
-	_menu.setPosition(395, 0);
+
 	_gameState = entry::gamestate::showingsplash;
+
+
 
 	while (!isExiting())
 	{
@@ -50,12 +52,26 @@ void entry::gameLoop()
 			{
 			case entry::showingmenu:
 			{
-				showMenuSprite();
+				menu * menuobj = new menu();
+				menuobj->load("images/menusprite.png");
+				menuobj->setPosition(395, 0);
+				_objectManager.add("Menu", menuobj);
+				_mainWindow.clear();
+				_objectManager.drawAll(_mainWindow);
+				_mainWindow.display();
+				entry::handleMenu(menuobj);
+				_objectManager.remove("Menu");
 				break;
 			}
 			case entry::showingsplash:
 			{
-				showIntroScreen();
+				introobj->load("images/introscreen.png");
+				_objectManager.add("Intro", introobj);
+				_mainWindow.clear();
+				_objectManager.drawAll(_mainWindow);
+				_mainWindow.display();
+				introobj->onCreate(_mainWindow);
+				_gameState = entry::showingmenu;
 				break;
 			}
 			case entry::showingoptions:
@@ -70,22 +86,22 @@ void entry::gameLoop()
 			}
 			}
 		}
+		_objectManager.drawAll(_mainWindow);
+		_mainWindow.display();
 	}
 }
 
 void entry::showIntroScreen()
 {
 	intro introScreen;
-	introScreen.show(_mainWindow);
+	//introScreen.show(_mainWindow);
 	_gameState = entry::showingmenu;
 	return;
 }
 
-void entry::showMenuSprite()
+void entry::handleMenu(menu * menuobj)
 {
-	_menu.draw(_mainWindow);
-	_mainWindow.display();
-	menu::menuaction action = _menu.getMenuAction(_mainWindow);
+	menu::menuaction action = menuobj->getMenuAction(_mainWindow);
 	switch (action)
 	{
 	case menu::exit:

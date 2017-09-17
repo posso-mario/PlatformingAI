@@ -1,19 +1,19 @@
 #include "stdafx.h"
 #include "intro.h"
 
-void intro::show(sf::RenderWindow & window)
+intro::intro()
+{
+
+}
+
+intro::~intro()
+{
+
+}
+
+void intro::onCreate(sf::RenderWindow & window)
 {
 	std::cout << "printing intro\n";
-	sf::Texture texture;
-	if (texture.loadFromFile("images/introscreen.png") != true)
-	{
-		return;
-	}
-	sf::Sprite sprite(texture);
-
-	window.draw(sprite);
-	window.display();
-
 	sf::Event event;
 	while (true)
 	{

@@ -2,6 +2,7 @@
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
 #include "menu.h"
+#include "objmngr.h"
 
 
 class entry
@@ -16,7 +17,7 @@ private:
 	static bool isExiting();
 	static void gameLoop();
 	static void showIntroScreen();
-	static void showMenuSprite();
+	static void handleMenu(menu * menuobj);
 
 	enum gamestate {
 		uninitialized, showingsplash, paused,
@@ -25,5 +26,5 @@ private:
 
 	static gamestate _gameState;
 	static sf::RenderWindow _mainWindow;
-	static menu _menu;
+	static objmngr _objectManager;
 };

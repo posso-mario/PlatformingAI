@@ -48,6 +48,12 @@ void objmngr::drawAll(sf::RenderWindow& renderWindow)
 	while (itr != _gameObjects.end())
 	{
 		itr->second->draw(renderWindow);
+		/*if(itr->second->handledCreate == false)
+		{
+			itr->second->onCreate(renderWindow);
+			itr = _gameObjects.begin();
+			continue;
+		}*/
 		itr++;
 	}
 }

@@ -1,6 +1,10 @@
 #pragma once
-class intro
+#include "visibleobj.h"
+
+class intro : public visibleobj
 {
 public:
-	void show(sf::RenderWindow& window);
+	intro();
+	~intro();
+	void onCreate(sf::RenderWindow & window);
 };

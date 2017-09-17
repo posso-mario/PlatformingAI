@@ -9,8 +9,10 @@ public:
 
 	virtual void load(std::string filename);
 	virtual void draw(sf::RenderWindow & window);
-
+	virtual void onCreate(sf::RenderWindow & window);
 	virtual void setPosition(float x, float y);
+
+	bool handledCreate = false;
 
 private:
 	sf::Sprite  _sprite;

@@ -12,6 +12,11 @@ visibleobj::~visibleobj()
 {
 }
 
+void visibleobj::onCreate(sf::RenderWindow & window)
+{
+
+}
+
 void visibleobj::load(std::string filename)
 {
 	if (_texture.loadFromFile(filename) == false)
