@@ -59,12 +59,15 @@ void entry::gameLoop()
 				_mainWindow.clear();
 				_objectManager.drawAll(_mainWindow);
 				_mainWindow.display();
-				entry::handleMenu(menuobj);
-				_objectManager.remove("Menu");
+				if (entry::handleMenu(menuobj) != menu::menuaction::nothing)
+				{
+					_objectManager.remove("Menu");
+				}
 				break;
 			}
 			case entry::showingsplash:
 			{
+				std::cout << "in showingsplash\n";
 				introobj->load("images/introscreen.png");
 				_objectManager.add("Intro", introobj);
 				_mainWindow.clear();
@@ -82,6 +85,7 @@ void entry::gameLoop()
 			{
 				_mainWindow.clear(sf::Color(255, 0, 0));
 				_mainWindow.display();
+				while (1);
 				break;
 			}
 			}
@@ -91,30 +95,25 @@ void entry::gameLoop()
 	}
 }
 
-void entry::showIntroScreen()
-{
-	intro introScreen;
-	//introScreen.show(_mainWindow);
-	_gameState = entry::showingmenu;
-	return;
-}
 
-void entry::handleMenu(menu * menuobj)
+menu::menuaction entry::handleMenu(menu * menuobj)
 {
 	menu::menuaction action = menuobj->getMenuAction(_mainWindow);
 	switch (action)
 	{
-	case menu::exit:
+	case menu::menuaction::exit:
 		_gameState = entry::exiting;
 		break;
-	case menu::play:
+	case menu::menuaction::play:
 		_gameState = entry::playing;
 		break;
-	case menu::options:
+	case menu::menuaction::options:
 		_gameState = entry::showingoptions;
 		break;
-	case menu::nothing:
+	case menu::menuaction::nothing:
 		std::cout << "Nothing \n";
 		break;
 	}
+	return action;
+
 }

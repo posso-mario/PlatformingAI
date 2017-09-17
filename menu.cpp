@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "menu.h"
+#include <iostream>
 
 menu::~menu()
 {
@@ -86,7 +87,14 @@ menu::menuaction  menu::getMenuAction(sf::RenderWindow& window)
 		{
 			if (menuEvent.type == sf::Event::MouseButtonPressed)
 			{
-				return handleClick(menuEvent.mouseButton.x, menuEvent.mouseButton.y);
+				menu::menuaction clickAction = handleClick(menuEvent.mouseButton.x, menuEvent.mouseButton.y);
+				while (menuEvent.type != sf::Event::MouseButtonReleased)
+				{
+					window.pollEvent(menuEvent);
+				}
+				menu::menuaction clickAction2 = handleClick(menuEvent.mouseButton.x, menuEvent.mouseButton.y);
+				if (clickAction == clickAction2) return(clickAction);
+				else return (menu::menuaction::nothing);
 			}
 			if (menuEvent.type == sf::Event::Closed)
 			{

@@ -17,7 +17,7 @@ private:
 	static bool isExiting();
 	static void gameLoop();
 	static void showIntroScreen();
-	static void handleMenu(menu * menuobj);
+	static menu::menuaction handleMenu(menu * menuobj);
 
 	enum gamestate {
 		uninitialized, showingsplash, paused,
