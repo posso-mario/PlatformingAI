@@ -1,0 +1,26 @@
+﻿  Building Custom Rule C:/Users/Mario/source/repos/PlatformingAI/SFML-2.4.2/src/SFML/Window/CMakeLists.txt
+  CMake does not need to re-run because C:/Users/Mario/source/repos/PlatformingAI/SFML-Build/src/SFML/Window/CMakeFiles/generate.stamp is up-to-date.
+  Context.cpp
+  GlContext.cpp
+  GlResource.cpp
+  Joystick.cpp
+  JoystickManager.cpp
+  Keyboard.cpp
+  Mouse.cpp
+  Touch.cpp
+  Sensor.cpp
+  SensorManager.cpp
+  VideoMode.cpp
+  Window.cpp
+  WindowImpl.cpp
+  WglContext.cpp
+  WglExtensions.cpp
+  InputImpl.cpp
+  JoystickImpl.cpp
+  SensorImpl.cpp
+  VideoModeImpl.cpp
+  WindowImplWin32.cpp
+  Generating Code...
+     Creating library C:/Users/Mario/source/repos/PlatformingAI/SFML-Build/lib/Debug/sfml-window-d.lib and object C:/Users/Mario/source/repos/PlatformingAI/SFML-Build/lib/Debug/sfml-window-d.exp
+  sfml-window.vcxproj -> C:\Users\Mario\source\repos\PlatformingAI\SFML-Build\lib\Debug\sfml-window-d-2.dll
+  sfml-window.vcxproj -> C:/Users/Mario/source/repos/PlatformingAI/SFML-Build/lib/Debug/sfml-window.pdb (Full PDB)
