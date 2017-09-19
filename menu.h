@@ -21,6 +21,8 @@ public:
 
  menuaction getMenuAction(sf::RenderWindow& window);
 
+ void load();
+
  //menuaction show(sf::RenderWindow& window);
 
 private:

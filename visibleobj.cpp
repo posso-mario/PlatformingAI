@@ -12,6 +12,29 @@ visibleobj::~visibleobj()
 {
 }
 
+sf::Sprite & visibleobj::getSprite()
+{
+	return _sprite;
+}
+
+sf::Vector2f visibleobj::getPosition() const
+{
+	if (_isLoaded)
+	{
+		return _sprite.getPosition();
+	}
+	return sf::Vector2f();
+}
+
+bool visibleobj::isLoaded() const
+{
+	return _isLoaded;
+}
+
+void visibleobj::update(float elapsedTime)
+{
+}
+
 void visibleobj::onCreate(sf::RenderWindow & window)
 {
 

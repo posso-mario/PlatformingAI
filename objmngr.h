@@ -13,6 +13,7 @@ public:
 	visibleobj* get(std::string name) const;
 
 	void drawAll(sf::RenderWindow& renderWindow);
+	void updateAll();
 
 private:
 	std::map<std::string, visibleobj*> _gameObjects;
@@ -24,4 +25,6 @@ private:
 			delete p.second;
 		}
 	};
+
+	sf::Clock clock;
 };

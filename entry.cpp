@@ -1,13 +1,17 @@
 #include "stdafx.h"
 #include "entry.h"
 #include "intro.h"
+#include "player.h"
 
 
 
 entry::gamestate entry::_gameState = uninitialized;
 sf::RenderWindow entry::_mainWindow;
 objmngr entry::_objectManager;
+sf::Keyboard entry::_keyboard;
 static intro * introobj = new intro();
+menu::menuaction lastAction;
+player * playerobj;
 
 void entry::start(void)
 {
@@ -15,7 +19,7 @@ void entry::start(void)
 		return;
 
 	_mainWindow.create(sf::VideoMode(1024, 768, 32), "AI-Platformer");
-
+	_mainWindow.setFramerateLimit(30);
 	_gameState = entry::gamestate::showingsplash;
 
 
@@ -36,10 +40,25 @@ bool entry::isExiting()
 		return false;
 }
 
+sf::RenderWindow & entry::getWindow()
+{
+	return _mainWindow;
+}
+
+sf::Keyboard & entry::getInput()
+{
+	return _keyboard;
+}
+
+objmngr & entry::getManager()
+{
+	return _objectManager;
+}
+
 void entry::gameLoop()
 {
 	sf::Event currentEvent;
-	while (_mainWindow.pollEvent(currentEvent))
+	while (_mainWindow.pollEvent(currentEvent) || true)
 	{
 
 		if (currentEvent.type == sf::Event::Closed)
@@ -52,14 +71,21 @@ void entry::gameLoop()
 			{
 			case entry::showingmenu:
 			{
-				menu * menuobj = new menu();
-				menuobj->load("images/menusprite.png");
-				menuobj->setPosition(395, 0);
-				_objectManager.add("Menu", menuobj);
+				menu * menuobj;
+				std::cout << "in showingmenu\n";
+				if (_objectManager.get("Menu") == NULL)
+				{
+					menuobj = new menu();
+					menuobj->load();
+					menuobj->setPosition(395, 0);
+					_objectManager.add("Menu", menuobj);
+				}
+				menuobj = dynamic_cast<menu *>(_objectManager.get("Menu"));
 				_mainWindow.clear();
 				_objectManager.drawAll(_mainWindow);
 				_mainWindow.display();
-				if (entry::handleMenu(menuobj) != menu::menuaction::nothing)
+				lastAction = entry::handleMenu(menuobj);
+				if ( lastAction != menu::menuaction::nothing)
 				{
 					_objectManager.remove("Menu");
 				}
@@ -68,7 +94,7 @@ void entry::gameLoop()
 			case entry::showingsplash:
 			{
 				std::cout << "in showingsplash\n";
-				introobj->load("images/introscreen.png");
+				introobj->load();
 				_objectManager.add("Intro", introobj);
 				_mainWindow.clear();
 				_objectManager.drawAll(_mainWindow);
@@ -83,9 +109,19 @@ void entry::gameLoop()
 			}
 			case entry::playing:
 			{
-				_mainWindow.clear(sf::Color(255, 0, 0));
+				std::cout << "playing\n";
+				if (_objectManager.get("Player") == NULL)
+				{
+					playerobj = new player();
+					playerobj->load();
+					playerobj->setPosition(420, 0);
+					_objectManager.add("Player", playerobj);
+				}
+				_mainWindow.clear();
+				_objectManager.drawAll(_mainWindow);
 				_mainWindow.display();
-				while (1);
+				_objectManager.updateAll();
+				
 				break;
 			}
 			}
@@ -99,6 +135,7 @@ void entry::gameLoop()
 menu::menuaction entry::handleMenu(menu * menuobj)
 {
 	menu::menuaction action = menuobj->getMenuAction(_mainWindow);
+	std::cout << action << "\n";
 	switch (action)
 	{
 	case menu::menuaction::exit:
@@ -106,6 +143,7 @@ menu::menuaction entry::handleMenu(menu * menuobj)
 		break;
 	case menu::menuaction::play:
 		_gameState = entry::playing;
+		std::cout << "playing\n";
 		break;
 	case menu::menuaction::options:
 		_gameState = entry::showingoptions;

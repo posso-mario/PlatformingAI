@@ -1,10 +1,13 @@
 #include "stdafx.h"
 #include "objmngr.h"
+#include "entry.h"
+
 
 
 
 objmngr::objmngr()
 {
+
 }
 
 objmngr::~objmngr()
@@ -56,4 +59,20 @@ void objmngr::drawAll(sf::RenderWindow& renderWindow)
 		}*/
 		itr++;
 	}
+}
+
+void objmngr::updateAll()
+{
+	std::map<std::string, visibleobj*>::const_iterator itr =_gameObjects.begin();
+	sf::Time timeDelta = clock.getElapsedTime();
+
+	while (itr != _gameObjects.end())
+	{
+		std::cout << "updating\n";
+		itr->second->update(timeDelta.asSeconds());
+		itr++;
+	}
+
+	clock.restart();
+
 }

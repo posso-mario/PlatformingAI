@@ -33,11 +33,11 @@ menu::menu()
 	playButton.action = play;
 
 	menulist optionsButton;
-	playButton.rect.top = 94;
-	playButton.rect.height = 42;
-	playButton.rect.left = 445;
-	playButton.rect.width = 138;
-	playButton.action = options;
+	optionsButton.rect.top = 94;
+	optionsButton.rect.height = 42;
+	optionsButton.rect.left = 445;
+	optionsButton.rect.width = 138;
+	optionsButton.action = options;
 
 	menulist exitButton;
 	exitButton.rect.left = 445;
@@ -46,9 +46,10 @@ menu::menu()
 	exitButton.rect.height = 42;
 	exitButton.action = exit;
 
-	_menuList.push_back(playButton);
 	_menuList.push_back(optionsButton);
+	_menuList.push_back(playButton);
 	_menuList.push_back(exitButton);
+	std::cout << "Size of list is: " << _menuList.size() << "\n";
 /*
 	window.clear();
 	window.draw(sprite);
@@ -57,13 +58,20 @@ menu::menu()
 */
 }
 
+void menu::load()
+{
+	visibleobj::load("images/menusprite.png");
+}
+
 menu::menuaction menu::handleClick(int x, int y)
 {
 	std::list<menulist>::iterator it;
 
 	for (it = _menuList.begin(); it != _menuList.end(); it++)
 	{
+		std::cout << (*it).action << "\n";
 		sf::Rect<int> menuItemRect = (*it).rect;
+		std::cout << menuItemRect.top << "\n";
 		if ((menuItemRect.top + menuItemRect.height) > y
 			&& menuItemRect.top < y
 			&& menuItemRect.left < x
@@ -91,6 +99,7 @@ menu::menuaction  menu::getMenuAction(sf::RenderWindow& window)
 				while (menuEvent.type != sf::Event::MouseButtonReleased)
 				{
 					window.pollEvent(menuEvent);
+					//std::cout << "loop\n";
 				}
 				menu::menuaction clickAction2 = handleClick(menuEvent.mouseButton.x, menuEvent.mouseButton.y);
 				if (clickAction == clickAction2) return(clickAction);

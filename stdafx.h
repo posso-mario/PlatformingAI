@@ -6,6 +6,8 @@
 #pragma once
 
 #include "targetver.h"
+#include <cassert>
+#include <iostream>
 
 #include <stdio.h>
 #include <tchar.h>

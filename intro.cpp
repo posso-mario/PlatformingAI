@@ -11,6 +11,11 @@ intro::~intro()
 
 }
 
+void intro::load()
+{
+	visibleobj::load("images/introscreen.png");
+}
+
 void intro::onCreate(sf::RenderWindow & window)
 {
 	std::cout << "printing intro\n";
