@@ -4,6 +4,9 @@
 #include "gamemaster.h"
 #include <iostream>
 
+bool holdAction = false;
+int jumpState = 1;
+
 sf::Texture texture;
 player::player()
 {
@@ -17,13 +20,13 @@ player::~player()
 
 void player::update(float elapsedTime)
 {
-	std::cout << "update called\n";
+	//std::cout << currentAction;
 	sf::Sprite &masterSprite = visibleobj::getSprite();
 	switch (currentAction)
 	{
 	case(run):
 	{
-		std::cout << "running\n";
+		//std::cout << "running\n";
 		masterSprite.setTexture((*it_run));
 		it_run++;
 		if (it_run == _runList.end()) it_run = _runList.begin();
@@ -33,44 +36,54 @@ void player::update(float elapsedTime)
 	case(jump):
 	{
 		masterSprite.setTexture((*it_jump));
-		it_jump++;
-		if (it_jump == _jumpList.end()) it_jump = _jumpList.begin();
+		jumpState += jumpState;
+		if (jumpState < 5) it_jump++;
+		if (jumpState == 64) { jumpState = -2; }
+		visibleobj::setPosition(visibleobj::getPosition().x, visibleobj::getPosition().y - 5*jumpState);
+		if (it_jump == _jumpList.end()) { it_jump = _jumpList.begin(); holdAction = false; jumpState = 1; }
 		break;
 	}
 	case(duck):
 	{
 		masterSprite.setTexture((*it_duck));
 		it_duck++;
-		if (it_duck == _duckList.end()) it_duck = _duckList.begin();
+		if (it_duck == _duckList.end()) { it_duck = _duckList.begin(); holdAction = false; }
 		break;
 	}
 	case(die):
 	{
 		masterSprite.setTexture((*it_die));
 		it_die++;
-		if (it_die == _dieList.end()) it_die = _dieList.begin();
+		if (it_die == _dieList.end()) { it_die = _dieList.begin(); holdAction = false; }
 		break;
 	}
 	}
 	/***********************************************************/
 	sf::Keyboard masterKeyboard = entry::getInput();
-	if (masterKeyboard.isKeyPressed(sf::Keyboard::Space))
+	if (!holdAction)
 	{
-		currentAction = jump;
-	}
-	else if (masterKeyboard.isKeyPressed(sf::Keyboard::Down))
-	{
-		currentAction = duck;
-	}
-	else
-	{
-		currentAction = run;
+		if (masterKeyboard.isKeyPressed(sf::Keyboard::Space))
+		{
+			currentAction = jump;
+			holdAction = true;
+		}
+		else if (masterKeyboard.isKeyPressed(sf::Keyboard::Down))
+		{
+			currentAction = duck;
+			holdAction = true;
+		}
+		else
+		{
+			currentAction = run;
+			holdAction = false;
+		}
 	}
 	/***********************************************************/
 	bool collision = gamemaster::getStatus();
 	if (collision)
 	{
 		currentAction = die;
+		holdAction = true;
 	}
 }
 

@@ -72,7 +72,7 @@ void entry::gameLoop()
 			case entry::showingmenu:
 			{
 				menu * menuobj;
-				std::cout << "in showingmenu\n";
+				//std::cout << "in showingmenu\n";
 				if (_objectManager.get("Menu") == NULL)
 				{
 					menuobj = new menu();
@@ -109,12 +109,12 @@ void entry::gameLoop()
 			}
 			case entry::playing:
 			{
-				std::cout << "playing\n";
+				//std::cout << "playing\n";
 				if (_objectManager.get("Player") == NULL)
 				{
 					playerobj = new player();
 					playerobj->load();
-					playerobj->setPosition(420, 0);
+					playerobj->setPosition(380, 668);
 					_objectManager.add("Player", playerobj);
 				}
 				_mainWindow.clear();

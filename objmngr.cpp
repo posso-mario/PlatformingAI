@@ -68,7 +68,7 @@ void objmngr::updateAll()
 
 	while (itr != _gameObjects.end())
 	{
-		std::cout << "updating\n";
+		//std::cout << "updating\n";
 		itr->second->update(timeDelta.asSeconds());
 		itr++;
 	}

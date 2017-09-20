@@ -8,7 +8,7 @@
 std::string obs_base = "obs";
 
 int gamemaster::last_match = 0;
-bool gamemaster::playerStatus;
+bool gamemaster::playerStatus = false;
 visibleobj * gamemaster::player;
 visibleobj * gamemaster::obstacle;
 
