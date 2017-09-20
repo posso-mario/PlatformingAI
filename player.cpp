@@ -6,6 +6,8 @@
 
 bool holdAction = false;
 int jumpState = 1;
+int duckState = 1;
+int dieState = 1;
 
 sf::Texture texture;
 player::player()
@@ -39,7 +41,7 @@ void player::update(float elapsedTime)
 		jumpState += jumpState;
 		if (jumpState < 5) it_jump++;
 		if (jumpState == 64) { jumpState = -2; }
-		visibleobj::setPosition(visibleobj::getPosition().x, visibleobj::getPosition().y - 5*jumpState);
+		visibleobj::setPosition(visibleobj::getPosition().x, visibleobj::getPosition().y - 2*jumpState);
 		if (it_jump == _jumpList.end()) { it_jump = _jumpList.begin(); holdAction = false; jumpState = 1; }
 		break;
 	}
@@ -47,14 +49,20 @@ void player::update(float elapsedTime)
 	{
 		masterSprite.setTexture((*it_duck));
 		it_duck++;
-		if (it_duck == _duckList.end()) { it_duck = _duckList.begin(); holdAction = false; }
+		duckState += duckState;
+		if (duckState < 5) it_duck++;
+		if (duckState == 64) { duckState = -2; }
+		if (it_duck == _duckList.end()) { it_duck = _duckList.begin(); holdAction = false; duckState = 1; }
 		break;
 	}
 	case(die):
 	{
 		masterSprite.setTexture((*it_die));
 		it_die++;
-		if (it_die == _dieList.end()) { it_die = _dieList.begin(); holdAction = false; }
+		dieState += dieState;
+		if (dieState < 5) it_die++;
+		if (dieState == 1024) { dieState = -2; }
+		if (it_die == _dieList.end()) { it_die = _dieList.begin(); holdAction = false; dieState = 1; }
 		break;
 	}
 	}
@@ -64,7 +72,7 @@ void player::update(float elapsedTime)
 	{
 		if (masterKeyboard.isKeyPressed(sf::Keyboard::Space))
 		{
-			currentAction = jump;
+			currentAction = die;
 			holdAction = true;
 		}
 		else if (masterKeyboard.isKeyPressed(sf::Keyboard::Down))
@@ -90,9 +98,9 @@ void player::update(float elapsedTime)
 void player::load()
 {
 	std::string filename_base_run = "images/wolf_runframe";
-	std::string filename_base_duck = "images/wolf_runframe";
+	std::string filename_base_duck = "images/wolf_duckframe";
 	std::string filename_base_jump = "images/wolf_jumpframe";
-	std::string filename_base_die = "images/wolf_runframe";
+	std::string filename_base_die = "images/wolf_dieframe";
 	sf::Texture texture;
 	for (int i = 0; i < 6; i++)
 	{
