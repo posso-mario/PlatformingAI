@@ -2,6 +2,7 @@
 #include "entry.h"
 #include "intro.h"
 #include "player.h"
+#include "gamemaster.h"
 
 
 
@@ -9,17 +10,21 @@ entry::gamestate entry::_gameState = uninitialized;
 sf::RenderWindow entry::_mainWindow;
 objmngr entry::_objectManager;
 sf::Keyboard entry::_keyboard;
-static intro * introobj = new intro();
+//static intro * introobj = new intro();
 menu::menuaction lastAction;
 player * playerobj;
+bool firstObs = false;
+gamemaster entry::_gameMaster;
+bool entry::isDead;
 
 void entry::start(void)
 {
+	isDead = false;
 	if (_gameState != uninitialized)
 		return;
 
 	_mainWindow.create(sf::VideoMode(1024, 768, 32), "AI-Platformer");
-	_mainWindow.setFramerateLimit(30);
+	_mainWindow.setFramerateLimit(60);
 	_gameState = entry::gamestate::showingsplash;
 
 
@@ -55,6 +60,15 @@ objmngr & entry::getManager()
 	return _objectManager;
 }
 
+gamemaster & entry::getGM()
+{
+	return _gameMaster;
+}
+
+void entry::setDeath()
+{
+	isDead = true;
+}
 void entry::gameLoop()
 {
 	sf::Event currentEvent;
@@ -87,20 +101,26 @@ void entry::gameLoop()
 				lastAction = entry::handleMenu(menuobj);
 				if ( lastAction != menu::menuaction::nothing)
 				{
-					_objectManager.remove("Menu");
+					_objectManager.remove("Menu", false);
 				}
 				break;
 			}
 			case entry::showingsplash:
 			{
-				std::cout << "in showingsplash\n";
-				introobj->load();
-				_objectManager.add("Intro", introobj);
-				_mainWindow.clear();
-				_objectManager.drawAll(_mainWindow);
-				_mainWindow.display();
-				introobj->onCreate(_mainWindow);
-				_gameState = entry::showingmenu;
+				intro * introobj;
+				//std::cout << "in showingsplash\n";
+				if (_objectManager.get("Intro") == NULL)
+				{
+					introobj = new intro();
+					introobj->load();
+					_objectManager.add("Intro", introobj);
+					_mainWindow.clear();
+					_objectManager.drawAll(_mainWindow);
+					_mainWindow.display();
+					introobj->onCreate(_mainWindow);
+					_gameState = entry::showingmenu;
+				}
+				
 				break;
 			}
 			case entry::showingoptions:
@@ -116,12 +136,21 @@ void entry::gameLoop()
 					playerobj->load();
 					playerobj->setPosition(380, 668);
 					_objectManager.add("Player", playerobj);
+					_gameMaster.registerPlayer(playerobj);
 				}
+				
+				_gameMaster.createObstacle();
 				_mainWindow.clear();
 				_objectManager.drawAll(_mainWindow);
 				_mainWindow.display();
 				_objectManager.updateAll();
-				
+				if (isDead)
+				{
+					isDead = false;
+					_gameMaster.deleteAll();
+					_objectManager.removeAll();
+					_gameState = entry::showingsplash;
+				}
 				break;
 			}
 			}
@@ -130,6 +159,8 @@ void entry::gameLoop()
 		_mainWindow.display();
 	}
 }
+
+
 
 
 menu::menuaction entry::handleMenu(menu * menuobj)

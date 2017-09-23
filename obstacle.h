@@ -8,7 +8,7 @@ public:
 	int obstacle_width = 300;
 	int obstacle_height = 150;
 
-	enum obstacle_t {air, ground};
+	enum obstacle_t {good, bad};
 
 	obstacle();
 
@@ -18,9 +18,16 @@ public:
 
 	float getVelocity() const;
 
+	void setVelocity(float velocity);
+
 	void load(obstacle_t type);
+
+	int getInstNum();
+
+	void setInstNum(int num);
 	
 private:
 	float _velocity;
 	obstacle_t currentType;
+	int instNum;
 };

@@ -8,10 +8,10 @@ public:
 	~objmngr();
 
 	void add(std::string name, visibleobj* gameObject);
-	void remove(std::string name);
+	void remove(std::string name, bool externalDeletion);
 	int getObjectCount() const;
 	visibleobj* get(std::string name) const;
-
+	void removeAll();
 	void drawAll(sf::RenderWindow& renderWindow);
 	void updateAll();
 

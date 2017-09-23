@@ -20,13 +20,27 @@ void objmngr::add(std::string name, visibleobj* gameObject)
 	_gameObjects.insert(std::pair<std::string, visibleobj*>(name, gameObject));
 }
 
-void objmngr::remove(std::string name)
+void objmngr::remove(std::string name, bool externalDeletion = false)
 {
 	std::map<std::string, visibleobj*>::iterator results = _gameObjects.find(name);
 	if (results != _gameObjects.end())
 	{
-		delete results->second;
+		//std::cout << "removing"<<name<< "\n";
+		if (externalDeletion == false)
+		{
+			delete results->second;
+		}
 		_gameObjects.erase(results);
+	}
+}
+
+void objmngr::removeAll()
+{
+	std::map<std::string, visibleobj*>::iterator it = _gameObjects.begin();
+	while (it != _gameObjects.end())
+	{
+		delete it->second;
+		it = _gameObjects.erase(it);
 	}
 }
 

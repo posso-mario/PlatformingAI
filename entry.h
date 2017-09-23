@@ -3,6 +3,7 @@
 #include "SFML/Graphics.hpp"
 #include "menu.h"
 #include "objmngr.h"
+#include "gamemaster.h"
 
 
 class entry
@@ -12,7 +13,9 @@ public:
 	static void start();
 	static sf::RenderWindow & getWindow();
 	static objmngr & getManager();
+	static gamemaster &getGM();
 	static sf::Keyboard & getInput();
+	static void setDeath();
 	const static int width = 1024;
 	const static int height = 768;
 
@@ -32,5 +35,7 @@ private:
 	static gamestate _gameState;
 	static sf::RenderWindow _mainWindow;
 	static objmngr _objectManager;
+	static gamemaster _gameMaster;
 	static sf::Keyboard _keyboard;
+	static bool isDead;
 };

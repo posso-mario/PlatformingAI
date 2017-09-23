@@ -8,6 +8,7 @@ bool holdAction = false;
 int jumpState = 1;
 int duckState = 1;
 int dieState = 1;
+int framerateDivider = 0;
 
 sf::Texture texture;
 player::player()
@@ -29,40 +30,77 @@ void player::update(float elapsedTime)
 	case(run):
 	{
 		//std::cout << "running\n";
-		masterSprite.setTexture((*it_run));
-		it_run++;
-		if (it_run == _runList.end()) it_run = _runList.begin();
+		if (framerateDivider == 0)
+		{
+			masterSprite.setTexture((*it_run));
+			it_run++;
+			if (it_run == _runList.end()) it_run = _runList.begin();
+			framerateDivider = 1;
+		}
+		else
+		{
+			framerateDivider = 0;
+		}
+		
 		
 		break;
 	}
 	case(jump):
 	{
-		masterSprite.setTexture((*it_jump));
-		jumpState += jumpState;
-		if (jumpState < 5) it_jump++;
-		if (jumpState == 64) { jumpState = -2; }
-		visibleobj::setPosition(visibleobj::getPosition().x, visibleobj::getPosition().y - 2*jumpState);
-		if (it_jump == _jumpList.end()) { it_jump = _jumpList.begin(); holdAction = false; jumpState = 1; }
+		if (framerateDivider == 0)
+		{
+			masterSprite.setTexture((*it_jump));
+			jumpState += jumpState;
+			if (jumpState < 5) it_jump++;
+			if (jumpState == 64) { jumpState = -2; }
+			visibleobj::setPosition(visibleobj::getPosition().x, visibleobj::getPosition().y - 10 * jumpState);
+			if (it_jump == _jumpList.end()) { it_jump = _jumpList.begin(); holdAction = false; jumpState = 1; }
+			framerateDivider = 1;
+
+		}
+		else
+		{
+			framerateDivider = 0;
+		}
 		break;
 	}
 	case(duck):
 	{
-		masterSprite.setTexture((*it_duck));
-		it_duck++;
-		duckState += duckState;
-		if (duckState < 5) it_duck++;
-		if (duckState == 64) { duckState = -2; }
-		if (it_duck == _duckList.end()) { it_duck = _duckList.begin(); holdAction = false; duckState = 1; }
+		if (framerateDivider == 0)
+		{
+			masterSprite.setTexture((*it_duck));
+			it_duck++;
+			duckState += duckState;
+			if (duckState < 5) it_duck++;
+			if (duckState == 64) { duckState = -2; }
+			if (it_duck == _duckList.end()) { it_duck = _duckList.begin(); holdAction = false; duckState = 1; }
+			framerateDivider = 1;
+
+		}
+		else
+		{
+			framerateDivider = 0;
+		}
 		break;
 	}
 	case(die):
 	{
-		masterSprite.setTexture((*it_die));
-		it_die++;
-		dieState += dieState;
-		if (dieState < 5) it_die++;
-		if (dieState == 1024) { dieState = -2; }
-		if (it_die == _dieList.end()) { it_die = _dieList.begin(); holdAction = false; dieState = 1; }
+		if (framerateDivider == 0)
+		{
+			masterSprite.setTexture((*it_die));
+			visibleobj::setPosition(380, 668);
+			it_die++;
+			dieState += dieState;
+			if (dieState < 5) it_die++;
+			if (dieState == 32768) { dieState = -2; }
+			if (it_die == _dieList.end()) { it_die = _dieList.begin(); holdAction = false; dieState = 1; entry::setDeath(); }
+			framerateDivider = 1;
+
+		}
+		else
+		{
+			framerateDivider = 0;
+		}
 		break;
 	}
 	}
@@ -72,7 +110,7 @@ void player::update(float elapsedTime)
 	{
 		if (masterKeyboard.isKeyPressed(sf::Keyboard::Space))
 		{
-			currentAction = die;
+			currentAction = jump;
 			holdAction = true;
 		}
 		else if (masterKeyboard.isKeyPressed(sf::Keyboard::Down))
@@ -87,7 +125,7 @@ void player::update(float elapsedTime)
 		}
 	}
 	/***********************************************************/
-	bool collision = gamemaster::getStatus();
+	bool collision = entry::getGM().checkCollision();
 	if (collision)
 	{
 		currentAction = die;
