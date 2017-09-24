@@ -137,9 +137,11 @@ void entry::gameLoop()
 					playerobj->setPosition(380, 668);
 					_objectManager.add("Player", playerobj);
 					_gameMaster.registerPlayer(playerobj);
+					_gameMaster.resetScore();
 				}
 				
 				_gameMaster.createObstacle();
+				_gameMaster.getScore();
 				_mainWindow.clear();
 				_objectManager.drawAll(_mainWindow);
 				_mainWindow.display();
@@ -166,7 +168,7 @@ void entry::gameLoop()
 menu::menuaction entry::handleMenu(menu * menuobj)
 {
 	menu::menuaction action = menuobj->getMenuAction(_mainWindow);
-	std::cout << action << "\n";
+	//std::cout << action << "\n";
 	switch (action)
 	{
 	case menu::menuaction::exit:
@@ -174,13 +176,13 @@ menu::menuaction entry::handleMenu(menu * menuobj)
 		break;
 	case menu::menuaction::play:
 		_gameState = entry::playing;
-		std::cout << "playing\n";
+		//std::cout << "playing\n";
 		break;
 	case menu::menuaction::options:
 		_gameState = entry::showingoptions;
 		break;
 	case menu::menuaction::nothing:
-		std::cout << "Nothing \n";
+		//std::cout << "Nothing \n";
 		break;
 	}
 	return action;

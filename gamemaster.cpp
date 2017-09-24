@@ -12,6 +12,7 @@ std::string obs_base = "obs";
 int currentObsNum = 0;
 obstacle * latest_obs = NULL;
 obstacle * colliding_obs = NULL;
+obstacle * last_scored_obs = NULL;
 
 //int gamemaster::last_match = 0;
 //bool gamemaster::playerStatus = false;
@@ -19,6 +20,7 @@ obstacle * colliding_obs = NULL;
 //player * gamemaster::playerPtr;
 int obj_count = 0;
 int removed_count = 0;
+int score;
 
 void updateCollider(std::list<obstacle> & obstacles, int player_x);
 
@@ -27,15 +29,30 @@ void updateCollider(std::list<obstacle> & obstacles, int player_x);
 
 gamemaster::gamemaster()
 {
+	_score = 0;
+	score = 0;
 }
 
 gamemaster::~gamemaster()
 {
 
 }
+
+int gamemaster::getScore()
+{
+	return _score;
+}
+
+void gamemaster::resetScore()
+
+{
+	_score = 0;
+	score = 0;
+}
+
 bool allowCreate(obstacle * obs)
 {
-	std::cout << obs << "\n";
+	//std::cout << obs << "\n";
 	if ((1024 - obs->getPosition().x) > 500)
 	{
 		return true;
@@ -117,18 +134,22 @@ void gamemaster::registerPlayer(player * _player)
 {
 	srand(time(NULL));
 	playerPtr = _player;
+	colliding_obs = NULL;
+	last_scored_obs = NULL;
+	latest_obs = NULL;
 }
 
 bool gamemaster::checkCollision()
 {
 	updateCollider(_obstacles, playerPtr->getPosition().x);
+	_score = score;
 	if (colliding_obs != NULL)
 	{
 		if ((*colliding_obs).getPosition().x <= (playerPtr->getPosition().x + playerPtr->player_width))
 		{
 			//std::cout << "removing something \n";
 			if ((*colliding_obs).getPosition().y <= (playerPtr->getPosition().y + playerPtr->player_height))
-			{//NEED TO TRACK COLLIDING OBJECT'S NAME, REMOVE THAT, NOT THE FRONT. WHEN THAT HAPPENS, LIST MUST BE SPLICED AT THE OBSTACLE LOCATION.
+			{
 				int instNum = colliding_obs->getInstNum();
 				std::string append = std::to_string(instNum);
 				entry::getManager().remove(obs_base + append, true);
@@ -139,6 +160,7 @@ bool gamemaster::checkCollision()
 					{
 						if (&(*it) == latest_obs) latest_obs = NULL;
 						it = _obstacles.erase(it);
+						colliding_obs = NULL;
 						break;
 					}
 					else
@@ -169,6 +191,15 @@ void updateCollider(std::list<obstacle> & obstacles, int player_x)
 	if (colliding_obs == NULL && obstacles.empty() != true)
 	{
 		colliding_obs = &(*obstacles.begin());
+	}
+	if (colliding_obs != NULL)
+	{
+		if (colliding_obs->getPosition().x < player_x && colliding_obs != last_scored_obs)
+		{
+			score++;
+			std::cout << score << "\n";
+			last_scored_obs = colliding_obs;
+		}
 	}
 	if (!obstacles.empty())
 	{

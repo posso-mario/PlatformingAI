@@ -13,6 +13,8 @@ public:
 	//static void advanceObstacle();
 	bool createObstacle();
 	bool checkCollision();
+	int getScore();
+	void resetScore();
 	void registerPlayer(player * _player);
 	void deleteAll();
 
@@ -21,4 +23,5 @@ private:
 	std::list<obstacle> _obstacles;
 	bool playerStatus;
 	int last_match;
+	int _score;
 };
