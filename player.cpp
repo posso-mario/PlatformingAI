@@ -5,14 +5,36 @@
 #include <iostream>
 
 bool holdAction = false;
-int jumpState = 1;
+int jumpState = 0;
 int duckState = 1;
 int dieState = 1;
+int multiplier = 1;
 int framerateDivider = 0;
+int jumpHeight[60];
 
 sf::Texture texture;
 player::player()
 {
+	jumpHeight[0] = 0;
+	jumpHeight[1] = -5;
+	jumpHeight[2] = -15;
+	for (int i = 3; i < 15; i++)
+	{
+		if (i < 9) jumpHeight[i] = -1;
+		else jumpHeight[i] = 1;
+	}
+	jumpHeight[15] = 15;
+	jumpHeight[16] = 5;
+	jumpHeight[17] = 0;
+	for (int i = 54; i < 60; i++)
+	{
+		jumpHeight[i] = 0;
+	}
+	holdAction = false;
+	jumpState = 0;
+	duckState = 1;
+	dieState = 1;
+	framerateDivider = 0;
 
 }
 
@@ -35,11 +57,11 @@ void player::update(float elapsedTime)
 			masterSprite.setTexture((*it_run));
 			it_run++;
 			if (it_run == _runList.end()) it_run = _runList.begin();
-			framerateDivider = 1;
+			framerateDivider = FRAME_RATE_DIVISION;
 		}
 		else
 		{
-			framerateDivider = 0;
+			framerateDivider--;
 		}
 		
 		
@@ -50,17 +72,17 @@ void player::update(float elapsedTime)
 		if (framerateDivider == 0)
 		{
 			masterSprite.setTexture((*it_jump));
-			jumpState += jumpState;
-			if (jumpState < 5) it_jump++;
-			if (jumpState == 64) { jumpState = -2; }
-			visibleobj::setPosition(visibleobj::getPosition().x, visibleobj::getPosition().y - 10 * jumpState);
-			if (it_jump == _jumpList.end()) { it_jump = _jumpList.begin(); holdAction = false; jumpState = 1; }
-			framerateDivider = 1;
+			if (jumpState < 3) it_jump++;
+			if (jumpState > 14) it_jump++;
+			visibleobj::setPosition(visibleobj::getPosition().x, visibleobj::getPosition().y + 7*jumpHeight[jumpState]);
+			jumpState++;
+			if (it_jump == _jumpList.end()) { it_jump = _jumpList.begin(); holdAction = false; jumpState = 0; multiplier = 1; }
+			framerateDivider = FRAME_RATE_DIVISION;
 
 		}
 		else
 		{
-			framerateDivider = 0;
+			framerateDivider--;
 		}
 		break;
 	}
@@ -74,12 +96,12 @@ void player::update(float elapsedTime)
 			if (duckState < 5) it_duck++;
 			if (duckState == 64) { duckState = -2; }
 			if (it_duck == _duckList.end()) { it_duck = _duckList.begin(); holdAction = false; duckState = 1; }
-			framerateDivider = 1;
+			framerateDivider = FRAME_RATE_DIVISION;
 
 		}
 		else
 		{
-			framerateDivider = 0;
+			framerateDivider--;
 		}
 		break;
 	}
@@ -94,12 +116,12 @@ void player::update(float elapsedTime)
 			if (dieState < 5) it_die++;
 			if (dieState == 32768) { dieState = -2; }
 			if (it_die == _dieList.end()) { it_die = _dieList.begin(); holdAction = false; dieState = 1; entry::setDeath(); }
-			framerateDivider = 1;
+			framerateDivider = FRAME_RATE_DIVISION;
 
 		}
 		else
 		{
-			framerateDivider = 0;
+			framerateDivider--;;
 		}
 		break;
 	}

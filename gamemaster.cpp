@@ -36,7 +36,7 @@ gamemaster::~gamemaster()
 bool allowCreate(obstacle * obs)
 {
 	std::cout << obs << "\n";
-	if ((1024 - obs->getPosition().x) > 150)
+	if ((1024 - obs->getPosition().x) > 500)
 	{
 		return true;
 	}
@@ -59,7 +59,7 @@ bool gamemaster::createObstacle()
 			obstacle * obs = new obstacle();
 			obs->load(obstacle::obstacle_t::good);
 			obs->setPosition(1064, 718);
-			obs->setVelocity(-500);
+			obs->setVelocity(-800);
 			obs->setInstNum(obj_count);
 			_obstacles.push_back(*obs);
 			objmngr & Mngr = entry::getManager();
@@ -77,7 +77,7 @@ bool gamemaster::createObstacle()
 			obstacle * obs = new obstacle();
 			obs->load(obstacle::obstacle_t::bad);
 			obs->setPosition(1064, 718);
-			obs->setVelocity(-500);
+			obs->setVelocity(-800);
 			obs->setInstNum(obj_count);
 			_obstacles.push_back(*obs);
 			objmngr & Mngr = entry::getManager();

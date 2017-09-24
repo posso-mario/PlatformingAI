@@ -5,6 +5,8 @@
 #include "objmngr.h"
 #include "gamemaster.h"
 
+#define FRAME_RATE_DIVISION 4
+
 
 class entry
 {

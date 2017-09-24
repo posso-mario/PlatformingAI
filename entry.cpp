@@ -24,7 +24,7 @@ void entry::start(void)
 		return;
 
 	_mainWindow.create(sf::VideoMode(1024, 768, 32), "AI-Platformer");
-	_mainWindow.setFramerateLimit(60);
+	_mainWindow.setFramerateLimit(300);
 	_gameState = entry::gamestate::showingsplash;
 
 
