@@ -24,6 +24,8 @@ public:
 
 	int getInstNum();
 
+	obstacle_t getType();
+
 	void setInstNum(int num);
 	
 private:

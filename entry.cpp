@@ -7,6 +7,8 @@
 
 
 entry::gamestate entry::_gameState = uninitialized;
+sf::Font font;
+sf::Text text;
 sf::RenderWindow entry::_mainWindow;
 objmngr entry::_objectManager;
 sf::Keyboard entry::_keyboard;
@@ -26,9 +28,10 @@ void entry::start(void)
 	_mainWindow.create(sf::VideoMode(1024, 768, 32), "AI-Platformer");
 	_mainWindow.setFramerateLimit(300);
 	_gameState = entry::gamestate::showingsplash;
-
-
-
+	font.loadFromFile("fonts/Oswald-Bold.ttf");
+	text.setFont(font);
+	text.setCharacterSize(24);
+	text.setFillColor(sf::Color::Magenta);
 	while (!isExiting())
 	{
 		gameLoop();
@@ -139,11 +142,12 @@ void entry::gameLoop()
 					_gameMaster.registerPlayer(playerobj);
 					_gameMaster.resetScore();
 				}
-				
+				text.setString(std::to_string(_gameMaster.getScore()));
 				_gameMaster.createObstacle();
 				_gameMaster.getScore();
 				_mainWindow.clear();
 				_objectManager.drawAll(_mainWindow);
+				_mainWindow.draw(text);
 				_mainWindow.display();
 				_objectManager.updateAll();
 				if (isDead)
@@ -158,6 +162,7 @@ void entry::gameLoop()
 			}
 		}
 		_objectManager.drawAll(_mainWindow);
+		_mainWindow.draw(text);
 		_mainWindow.display();
 	}
 }

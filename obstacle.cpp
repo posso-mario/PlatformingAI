@@ -14,6 +14,11 @@ obstacle::~obstacle()
 
 }
 
+obstacle::obstacle_t obstacle::getType()
+{
+	return currentType;
+}
+
 float obstacle::getVelocity() const
 {
 	return _velocity;
@@ -49,4 +54,5 @@ void obstacle::load(obstacle_t Type)
 	}
 	else if (Type == bad)
 		visibleobj::load("images/spikesprite.png");
+	currentType = Type;
 }

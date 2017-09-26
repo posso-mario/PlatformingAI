@@ -150,6 +150,14 @@ bool gamemaster::checkCollision()
 			//std::cout << "removing something \n";
 			if ((*colliding_obs).getPosition().y <= (playerPtr->getPosition().y + playerPtr->player_height))
 			{
+				bool return_val;
+				return_val = true;
+				if (playerPtr->getAction() == playerPtr->duck && colliding_obs->getType() == colliding_obs->good)
+				{
+					_score++;
+					score++;
+					return_val = false;
+				}
 				int instNum = colliding_obs->getInstNum();
 				std::string append = std::to_string(instNum);
 				entry::getManager().remove(obs_base + append, true);
@@ -169,7 +177,7 @@ bool gamemaster::checkCollision()
 					}
 				}
 				if (_obstacles.empty()) { latest_obs = NULL; colliding_obs = NULL; }
-				return true;
+				return return_val;
 			}
 			else
 			{
@@ -194,10 +202,10 @@ void updateCollider(std::list<obstacle> & obstacles, int player_x)
 	}
 	if (colliding_obs != NULL)
 	{
-		if (colliding_obs->getPosition().x < player_x && colliding_obs != last_scored_obs)
+		if (colliding_obs->getPosition().x < player_x && colliding_obs != last_scored_obs && colliding_obs->getType() != obstacle::good)
 		{
 			score++;
-			std::cout << score << "\n";
+			//std::cout << colliding_obs->getType()<< "\n";
 			last_scored_obs = colliding_obs;
 		}
 	}
